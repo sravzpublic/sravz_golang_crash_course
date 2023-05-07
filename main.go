@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/sravzpublic/sravz_golang_crash_course/pkg/aws"
 )
 
 func main() {
@@ -24,11 +25,12 @@ func main() {
 	log.Println("Symbols supported: ", symbols)
 	Symbols = strings.Split(symbols, ",") // []string{"ETHBTC", "BTCUSDC"}
 
+	log.Println(aws.HelloWord())
 	r := mux.NewRouter()
 	r.HandleFunc("/currency/{symbol}", GetCrypto).Methods("GET")
 
 	srv := &http.Server{
-		Addr: "0.0.0.0:8080",
+		Addr: "0.0.0.0:9999",
 		// Good practice to set timeouts to avoid Slowloris attacks.
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,

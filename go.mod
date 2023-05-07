@@ -1,4 +1,4 @@
-module sravz_golang_crash_course
+module github.com/sravzpublic/sravz_golang_crash_course
 
 go 1.16
 
