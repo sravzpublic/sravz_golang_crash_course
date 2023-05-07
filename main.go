@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/sravzpublic/sravz_golang_crash_course/pkg/aws"
+	"github.com/sravzpublic/sravz_golang_crash_course/pkg/util"
 )
 
 func main() {
@@ -23,9 +23,11 @@ func main() {
 
 	Cryptos = make(map[string]Crypto)
 	log.Println("Symbols supported: ", symbols)
-	Symbols = strings.Split(symbols, ",") // []string{"ETHBTC", "BTCUSDC"}
-
+	Symbols = util.SplitSting(symbols, ",")
+	// Symbols = strings.Split(symbols, ",") // []string{"ETHBTC", "BTCUSDC"}
+	wait = util.GetWaitTime()
 	log.Println(aws.HelloWord())
+	// log.Panicln(aws.HelloWordCannotImport)
 	r := mux.NewRouter()
 	r.HandleFunc("/currency/{symbol}", GetCrypto).Methods("GET")
 
