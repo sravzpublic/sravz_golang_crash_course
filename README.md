@@ -1,9 +1,14 @@
 # Sravz Golang Crash Course
 
-### Set up
+### Install/Setup
+Install golang 1.20. On Mac use brew
 ```
 $ go version
-go version go1.16.4 darwin/amd64
+go version go1.20.4 darwin/amd64
+
+# Install air
+$ mkdir -p $(pwd)/.bin; GOBIN=$(pwd)/.bin go install github.com/cosmtrek/air@latest 
+$ ./.bin/air init
 
 # Go mod tidy and vendor
 go mod tidy

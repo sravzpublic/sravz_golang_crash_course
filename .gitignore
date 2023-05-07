@@ -21,3 +21,5 @@
 go.work
 toy_poc
 vendor/
+.bin
+sravz_golang_crash_course

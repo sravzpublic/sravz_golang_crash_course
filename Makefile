@@ -1,3 +1,2 @@
-run: main.go crypto.go
-	go build
-	./toy_poc -symbols "BTCUSDC,ETHBTC"
+run: 
+	.bin/air -- -symbols "BTCUSDC,ETHBTC,ETHUSDC"

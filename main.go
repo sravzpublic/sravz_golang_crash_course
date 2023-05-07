@@ -21,6 +21,7 @@ func main() {
 	flag.Parse()
 
 	Cryptos = make(map[string]Crypto)
+	log.Println("Symbols supported: ", symbols)
 	Symbols = strings.Split(symbols, ",") // []string{"ETHBTC", "BTCUSDC"}
 
 	r := mux.NewRouter()
@@ -45,8 +46,11 @@ func main() {
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
+	// Blocks main until a signal is received
 	<-c
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
+	// Called after the main function returns
+	// Cancel the conext even if the main fuction returns before the timeout of 15 seconds
 	defer cancel()
 	srv.Shutdown(ctx)
 	log.Println("shutting down")
