@@ -9,24 +9,11 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/sravzpublic/sravz_golang_crash_course/pkg/models"
 )
 
-type Crypto struct {
-	Type               string `json:"type"`
-	BaseCurrency       string `json:"base_currency"`
-	QuoteCurrency      string `json:"quote_currency"`
-	Status             string `json:"status"`
-	QuantityIncrement  string `json:"quantity_increment"`
-	TickSize           string `json:"tick_size"`
-	TakeRate           string `json:"take_rate"`
-	MakeRate           string `json:"make_rate"`
-	FeeCurrency        string `json:"fee_currency"`
-	MarginTrading      bool   `json:"margin_trading"`
-	MaxInitialLeverage string `json:"max_initial_leverage"`
-}
-
 // Cryptos var as a slice Crypto struct
-var Cryptos map[string]Crypto
+var Cryptos map[string]models.Crypto
 var Symbols []string
 
 // GetCrypto gets a Crypto
@@ -48,7 +35,7 @@ func GetCrypto(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(string(responseData))
 
 		bytes := []byte(responseData)
-		var res Crypto
+		var res models.Crypto
 		err = json.Unmarshal(bytes, &res)
 
 		if err != nil {
@@ -62,7 +49,7 @@ func GetCrypto(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r) // Gets params
 
 	if params["symbol"] == "all" {
-		v := make([]Crypto, 0, len(Cryptos))
+		v := make([]models.Crypto, 0, len(Cryptos))
 
 		for _, value := range Cryptos {
 			v = append(v, value)

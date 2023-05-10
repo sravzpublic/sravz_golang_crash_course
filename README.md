@@ -8,6 +8,7 @@ go version go1.20.4 darwin/amd64
 
 # Install air
 $ mkdir -p $(pwd)/.bin; GOBIN=$(pwd)/.bin go install github.com/cosmtrek/air@latest 
+$ GOBIN=$(pwd)/.bin; go install github.com/smartystreets/goconvey
 $ ./.bin/air init
 
 # Go mod tidy and vendor

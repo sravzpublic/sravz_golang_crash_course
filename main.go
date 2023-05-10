@@ -7,23 +7,48 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
+	"runtime/pprof"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/sravzpublic/sravz_golang_crash_course/pkg/aws"
+	"github.com/sravzpublic/sravz_golang_crash_course/pkg/models"
 	"github.com/sravzpublic/sravz_golang_crash_course/pkg/util"
 )
+
+func Fib(n int) int {
+	if n < 2 {
+		return n
+	}
+	return Fib(n-1) + Fib(n-2)
+}
+
+func startProfiler(cpuprofile *string) {
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		runtime.SetCPUProfileRate(1000000)
+		defer f.Close()
+		defer pprof.StopCPUProfile()
+	}
+}
 
 func main() {
 	var wait time.Duration
 	var symbols string
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.StringVar(&symbols, "symbols", "ETHBTC,BTCUSDC", "Comma separted symbols list")
+	var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
 	flag.Parse()
-
-	Cryptos = make(map[string]Crypto)
+	startProfiler(cpuprofile)
+	Cryptos = make(map[string]models.Crypto)
 	log.Println("Symbols supported: ", symbols)
 	Symbols = util.SplitSting(symbols, ",")
+
 	// Symbols = strings.Split(symbols, ",") // []string{"ETHBTC", "BTCUSDC"}
 	wait = util.GetWaitTime()
 	log.Println(aws.HelloWord())
@@ -39,7 +64,6 @@ func main() {
 		IdleTimeout:  time.Second * 60,
 		Handler:      r, // Pass our instance of gorilla/mux in.
 	}
-
 	// Run our server in a goroutine so that it doesn't block.
 	go func() {
 		log.Println("Server listening at localhost:8080")
